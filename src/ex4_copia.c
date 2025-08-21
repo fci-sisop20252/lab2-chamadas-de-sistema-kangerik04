@@ -7,7 +7,7 @@
  * 1. Compile: gcc src/ex4_copia.c -o ex4_copia
  * 2. Execute: ./ex4_copia
  * 3. Verifique: diff dados/origem.txt dados/destino.txt
- * 4. Analise: strace -e open,read,write,close ./ex4_copia
+ * 4. Analise: strace -e openat,read,write,close ./ex4_copia
  */
 
 #include <fcntl.h>

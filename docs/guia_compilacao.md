@@ -1,11 +1,12 @@
-# Guia de Compilação com GCC
+# 🔨 Guia de Compilação com GCC
 
 Este breve guia ensina como usar o compilador GCC para compilar os exercícios do laboratório.
-## O que é o GCC?
+
+## 🤔 O que é o GCC?
 
 GCC (GNU Compiler Collection) é o compilador padrão para C em sistemas Linux. Ele transforma seu código fonte (`.c`) em um programa executável.
 
-## Verificando se o GCC está Instalado
+## ✔️ Verificando se o GCC está Instalado
 
 ```bash
 # Verificar versão
@@ -16,25 +17,25 @@ sudo apt update
 sudo apt install gcc
 ```
 
-## Compilação Básica
+## 📦 Compilação Básica
 
-### Sintaxe Simples
+### 📝 Sintaxe Simples
 ```bash
 gcc arquivo_fonte.c -o nome_do_executável
 ```
 
-### Exemplo Prático
+### 💻 Exemplo
 ```bash
 # Compilando o exercício 0
-gcc src/ex0_observar.c -o ex0_observar
+gcc src/ex1a_printf.c -o ex1a_printf
 
 # Executar
-./ex0_observar
+./ex1a_printf
 ```
 
-## Flags Úteis do GCC
+## 🚩 Flags Úteis do GCC
 
-### Flags Básicas Recomendadas
+### ⭐ Flags Básicas Recomendadas
 
 ```bash
 # Compilação com warnings e debug
@@ -45,127 +46,117 @@ gcc -Wall -g src/ex1_leitura.c -o ex1_leitura
 - `-Wall`: Mostra todos os warnings importantes
 - `-g`: Inclui informações de debug (útil para encontrar erros e usar outros programas de depuração)
 
-### Outras Flags Úteis
+### 🔧 Outras Flags Úteis
 
 ```bash
 # Compilação com otimização
 gcc -O2 src/ex2_contador.c -o ex2_contador
 
-# Compilação pedante (com mais warnings)
+# Compilação pedante (com mais warnings ainda, alguns irrelevantes para nosso contexto)
 gcc -Wall -Wextra -pedantic src/ex3_copia.c -o ex3_copia
 
 # Especificar padrão C
 gcc -std=c99 src/ex1_leitura.c -o ex1_leitura
 ```
 
-## Exemplos para Cada Exercício
+## 🎯 Exemplos para Cada Exercício
 
-### Exercício 0 - Observar
+### 0️⃣ Exercício 1a - Observar printf
 ```bash
 # Compilar
-gcc src/ex0_observar.c -o ex0_observar
+gcc src/ex1a_printf.c -o ex1a_printf
 
 # Executar normalmente
-./ex0_observar
+./ex1a_printf
 
 # Executar com strace
-strace ./ex0_observar
+strace ./ex1a_printf
 ```
 
-### Exercício 1 - Leitura
+### 1️⃣ Exercício 1b - Observar write
 ```bash
 # Compilar com debug e warnings
-gcc -Wall -g src/ex1_leitura.c -o ex1_leitura
+gcc -Wall -g src/ex1b_write.c -o ex1b_write
 
 # Testar se compila sem erros
-./ex1_leitura
+./ex1b_write
 
 # Se der erro, verificar warnings de compilação
 ```
 
-### Exercício 2 - Contador
+### 2️⃣ Exercício 2 - Leitura de Arquivo
+Primeiro preencha todos os TODOs antes de compilar.
+
 ```bash
 # Compilar
-gcc -Wall -g src/ex2_contador.c -o ex2_contador
+gcc -Wall -g src/ex2_leitura.c -o ex2_leitura
 
 # Testar
-./ex2_contador
+./ex2_leitura
 
 # Observar com strace
-strace -c ./ex2_contador
+strace -c ./ex2_leitura
 ```
 
-### Exercício 3 - Cópia
+### 3️⃣ Exercício 3 - Contador
+Primeiro preencha todos os TODOs antes de compilar.
+
 ```bash
 # Compilar
-gcc -Wall -g src/ex3_copia.c -o ex3_copia
+gcc -Wall -g src/ex3_contador.c -o ex3_contador
 
 # Testar
-./ex3_copia
-
-# Verificar se arquivo foi copiado
-ls -la
+./ex3_contador
 ```
 
-## Lidando com Erros de Compilação
+### 4️⃣ Exercício 4 - Copiar Arquivo
+Primeiro preencha todos os TODOs antes de compilar.
 
-### Erro: "No such file or directory"
+```bash
+# Compilar
+gcc -Wall -g src/ex4_copia.c -o ex4_copia
+
+# Testar
+./ex4_copia
+
+# Verificar se o arquivo foi copiado
+ls -la /dados
+```
+
+## ⚠️ Lidando com Erros de Compilação
+
+### 📁 Erro: "No such file or directory"
 ```bash
 # Verifique se o arquivo existe
-ls src/ex1_leitura.c
+ls src/ex1a_printf.c
 
 # Verifique se está no diretório correto
 pwd
 ls
 ```
 
-### Erro: "undefined reference"
+### 🔗 Erro: "undefined reference"
 Geralmente significa que você esqueceu de incluir uma biblioteca:
 ```c
-// Adicione os includes necessários
+// Adicione os includes necessários (nesse lab não deve ocorrer)
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
 ```
 
-### Warnings de Compilação
+### 💡 Warnings de Compilação
 Sempre corrija os warnings:
 ```bash
 # Exemplo de warning comum
-src/ex1_leitura.c:15: warning: unused variable 'buffer'
+src/ex1a_printf.c:15: warning: unused variable 'buffer'
 
 # Solução: use a variável ou remova se não precisar
 ```
 
-## Script de Compilação Rápida
+## 🤔 Makefile vs GCC Direto
 
-Crie um script simples para compilar todos os exercícios:
-
+### 🌟 Usando GCC Diretamente (Recomendado por ora)
 ```bash
-# Crie arquivo compile.sh
-nano compile.sh
-
-# Conteúdo do arquivo:
-#!/bin/bash
-echo "Compilando exercícios..."
-gcc -Wall -g src/ex0_observar.c -o ex0_observar
-gcc -Wall -g src/ex1_leitura.c -o ex1_leitura  
-gcc -Wall -g src/ex2_contador.c -o ex2_contador
-gcc -Wall -g src/ex3_copia.c -o ex3_copia
-echo "Compilação concluída!"
-
-# Tornar executável
-chmod +x compile.sh
-
-# Usar
-./compile.sh
-```
-
-## Makefile vs GCC Direto
-
-### Usando GCC Diretamente (Recomendado para iniciantes)
-```bash
-# Simples e direto
 gcc -Wall -g src/ex1_leitura.c -o ex1_leitura
 ```
 
@@ -174,141 +165,100 @@ gcc -Wall -g src/ex1_leitura.c -o ex1_leitura
 - Aprende os comandos de compilação
 - Sem dependências de Makefile
 
-### Usando Makefile (Opcional)
+### 📜 Usando Makefile (Opcional)
+
 ```bash
 # Se preferir automação
-make ex1
+make all
+
+# O make all só irá funcionar se você tiver completado todos os TODOs
 ```
 
 **Vantagens:**
 - Compilação automática
 - Facilita quando há muitos arquivos
 
-## Fluxo de Trabalho Recomendado
+## 🔄 Fluxo de Trabalho Recomendado
 
 ```bash
 # 1. Editar código
-nano src/ex1_leitura.c
+vim src/ex2_leitura.c
 
 # 2. Compilar com warnings
-gcc -Wall -g src/ex1_leitura.c -o ex1_leitura
+gcc -Wall -g src/ex2_leitura.c -o ex2_leitura
 
 # 3. Se houver erros, corrigir e repetir passo 2
 
 # 4. Testar programa
-./ex1_leitura
+./ex2_leitura
 
 # 5. Se funcionar, testar com strace
-strace ./ex1_leitura
+strace ./ex2_leitura
 
 # 6. Continuar com próximo exercício
 ```
 
-## Organizando Executáveis
-
-### Manter Organizado
+### 🧹 Limpeza
 ```bash
-# Criar pasta para executáveis (opcional)
-mkdir bin
-
-# Compilar para pasta específica
-gcc src/ex1_leitura.c -o bin/ex1_leitura
-
-# Executar
-./bin/ex1_leitura
-```
-
-### Limpeza
-```bash
-# Remover executáveis antigos
+# Remover executáveis antigos com nome errado
 rm ex0_observar ex1_leitura ex2_contador ex3_copia
 
 # Ou com padrão
 rm ex*
 ```
 
-## Dicas Importantes
+## 💡 Dicas Importantes
 
-### 1. Sempre Use Flags de Warning
+### 1️⃣ Sempre Use Flags de Warning (-Wall)
 ```bash
-# Bom
-gcc -Wall -g src/ex1_leitura.c -o ex1_leitura
-
-# Ruim (sem warnings)
-gcc src/ex1_leitura.c -o ex1_leitura
+gcc -Wall -g src/ex2_leitura.c -o ex2_leitura
 ```
 
-### 2. Nome do Executável
+### 2️⃣ Nome do Executável
 ```bash
 # Bom (nome claro)
-gcc src/ex1_leitura.c -o ex1_leitura
+gcc src/ex2_leitura.c -o ex2_leitura
 
 # Ruim (nome genérico)
-gcc src/ex1_leitura.c -o a.out
+gcc src/ex2_leitura.c -o a.out
 ```
 
-### 3. Teste Imediatamente
+### 3️⃣ Teste Imediatamente
 ```bash
 # Compile e teste logo
-gcc -Wall -g src/ex1_leitura.c -o ex1_leitura && ./ex1_leitura
+gcc -Wall -g src/ex2_leitura.c -o ex2_leitura && ./ex2_leitura
 ```
 
-### 4. Verifique Arquivos Necessários
+### 4️⃣ Verifique Arquivos Necessários
 ```bash
-# Antes de compilar exercícios que usam arquivos
+# Antes de executar exercícios que usam arquivos
 ls dados/teste1.txt
 ```
 
-## Exemplo Completo
+## 🔧 Problemas Comuns
 
-Vamos compilar e testar o exercício 1 completo:
-
-```bash
-# 1. Verificar se arquivo existe
-ls src/ex1_leitura.c
-
-# 2. Verificar se arquivo de dados existe
-ls dados/teste1.txt
-
-# 3. Compilar
-gcc -Wall -g src/ex1_leitura.c -o ex1_leitura
-
-# 4. Se houver warnings, corrigir código
-
-# 5. Testar execução
-./ex1_leitura
-
-# 6. Testar com strace
-strace -e open,read,close ./ex1_leitura
-
-# 7. Salvar trace
-strace -o traces/ex1_trace.txt ./ex1_leitura
-```
-
-## Problemas Comuns
-
-### "Permission denied"
+### 🔒 "Permission denied"
 ```bash
 # Dar permissão de execução
-chmod +x ex1_leitura
+chmod +x ex2_leitura
 ```
 
-### "Command not found"
+### ❌ "Command not found"
 ```bash
 # Usar ./
-./ex1_leitura
+./ex2_leitura
 
 # Não apenas
-ex1_leitura
+ex2_leitura
 ```
 
-### Programa não faz nada
+### 😶 Programa não faz nada
 ```bash
 # Verificar se há arquivos de entrada necessários
 ls dados/
 ```
 
-## Resumo dos Comandos
+## 📝 Resumo dos Comandos
 
 | Comando | O que faz |
 |---------|-----------|
@@ -318,4 +268,4 @@ ls dados/
 | `chmod +x programa` | Dar permissão de execução |
 | `ls -la programa` | Verificar se arquivo existe |
 
-**Lembre-se:** Compile sempre com `-Wall -g` para pegar erros cedo!
+**Lembre-se:** Compile sempre com `-Wall -g` para pegar problemas cedo!

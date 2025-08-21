@@ -1,0 +1,10 @@
+write(1, "=== Demonstra\303\247\303\243o: printf() ==="..., 33) = 33
+write(1, "\n", 1)                       = 1
+write(1, "Primeira mensagem via printf\n", 29) = 29
+write(1, "Segunda mensagem via printf\n", 28) = 28
+write(1, "Terceira mensagem via printf\n", 29) = 29
+write(1, "\n", 1)                       = 1
+write(1, "=== An\303\241lise ===\n", 17) = 17
+write(1, "Execute: strace -e write ./ex1a_"..., 39) = 39
+write(1, "Observe: Quantas chamadas write("..., 44) = 44
++++ exited with 0 +++

@@ -31,5 +31,6 @@ int main() {
  * CONCEITOS:
  * - printf() é função de biblioteca (não uma syscall direta)
  * - Usa stdout (file descriptor 1) para saída
- * - Pode usar buffering para agrupar dados
+ * - O printf() pode usar buffering para agrupar dados
+ * - Porém com um \n duplo, o buffer é forçado a ser enviado com um unico byte, o que pode resultar em mais chamadas write()
  */

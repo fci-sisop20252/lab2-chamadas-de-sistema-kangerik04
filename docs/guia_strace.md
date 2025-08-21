@@ -1,8 +1,8 @@
-# Guia Prático do strace
+# 🔍 Guia Prático do strace
 
 O `strace` é uma ferramenta essencial para este laboratório. Ele intercepta e mostra todas as chamadas de sistema que seu programa faz, permitindo ver "por baixo dos panos" como a aplicação se comunica com o kernel.
 
-## O que é o strace?
+## 🤔 O que é o strace?
 
 O strace é um depurador que:
 - Intercepta syscalls (chamadas de sistema) 
@@ -11,7 +11,7 @@ O strace é um depurador que:
 - Permite filtrar syscalls específicas
 - Ajuda a entender o comportamento de programas
 
-## Instalação
+## 📦 Instalação
 
 ```bash
 # Ubuntu/Debian
@@ -24,9 +24,9 @@ sudo yum install strace
 strace --version
 ```
 
-## Comandos Básicos
+## 💻 Comandos Básicos
 
-### 1. Rastreamento Simples
+### 1️⃣ Rastreamento Simples
 
 ```bash
 # Rastrear todas as syscalls
@@ -46,11 +46,11 @@ access("/etc/ld.so.nohwcap", F_OK)     = -1 ENOENT (No such file or directory)
 ...
 ```
 
-### 2. Filtrar Syscalls Específicas
+### 2️⃣ Filtrar Syscalls Específicas
 
 ```bash
 # Rastrear apenas syscalls de arquivo
-strace -e open,read,write,close ./programa
+strace -e openat,read,write,close ./programa
 
 # Rastrear apenas write
 strace -e write ./programa
@@ -60,7 +60,7 @@ strace -e file ./programa    # operações de arquivo
 strace -e process ./programa # operações de processo
 ```
 
-### 3. Contar Syscalls
+### 3️⃣ Contar Syscalls
 
 ```bash
 # Mostrar estatísticas de uso
@@ -79,40 +79,40 @@ strace -c ./programa
 100.00    0.000080                    12           total
 ```
 
-### 4. Salvar Saída em Arquivo
+### 4️⃣ Salvar Saída em Arquivo
 
 ```bash
 # Salvar trace completo
 strace -o trace.txt ./programa
 
 # Salvar apenas syscalls específicas
-strace -e open,read,write,close -o file_ops.txt ./programa
+strace -e openat,read,write,close -o file_ops.txt ./programa
 
 # Salvar estatísticas
 strace -c -o stats.txt ./programa
 ```
 
-## Interpretando a Saída do strace
+## 📊 Interpretando a Saída do strace
 
-### IMPORTANTE: Por que usar filtros?
+### ⚠️ IMPORTANTE: Por que usar filtros?
 
 **AVISO:** Executar `strace ./programa` sem filtros mostra MUITAS syscalls de preparação que não são relevantes para os exercícios:
 - Alocação de memória (brk, mmap)
-- Carregamento de bibliotecas (open, read de arquivos .so)
+- Carregamento de bibliotecas (openat, read de arquivos .so)
 - Configuração do ambiente (arch_prctl, set_tid_address)
 - Verificações de segurança (access, stat)
 
 **SEMPRE use `-e` para filtrar as syscalls que você quer observar!**
 
 ```bash
-# BOM - mostra apenas o que importa
+#mostra apenas o que importa
 strace -e write ./programa
 
-# RUIM - mostra centenas de linhas desnecessárias
+#mostra centenas de linhas
 strace ./programa
 ```
 
-### ⚠️ Nota Importante: open() vs openat()
+### 🔄 Nota Importante: open() vs openat()
 
 **Você verá `openat()` em vez de `open()` nos traces!**
 
@@ -123,14 +123,14 @@ strace ./programa
 
 **Para filtros strace:** Use `-e openat` em vez de `-e open`
 
-### Formato da Linha
+### 📋 Formato da Linha
 
 ```
 syscall(parâmetros) = valor_retorno [comentário]
 ```
 
 **Componentes:**
-- **syscall**: Nome da chamada de sistema (open, read, write, etc.)
+- **syscall**: Nome da chamada de sistema (openat, read, write, etc.)
 - **parâmetros**: Argumentos passados (strings entre aspas, números, flags)
 - **valor_retorno**: Resultado da operação
   - Números positivos: sucesso (ex: file descriptor, bytes transferidos)
@@ -138,7 +138,7 @@ syscall(parâmetros) = valor_retorno [comentário]
   - 0: pode indicar fim de arquivo (em read) ou sucesso (em close)
 - **comentário**: Informação adicional sobre erros
 
-### Exemplo Detalhado
+### 🔎 Exemplo Detalhado
 
 ```bash
 openat(AT_FDCWD, "dados/teste1.txt", O_RDONLY) = 3
@@ -151,7 +151,7 @@ openat(AT_FDCWD, "dados/teste1.txt", O_RDONLY) = 3
 - `O_RDONLY`: terceiro parâmetro (modo de abertura)
 - `= 3`: valor de retorno (file descriptor)
 
-### Exemplo com Erro
+### ❌ Exemplo com Erro
 
 ```bash
 open("arquivo_inexistente.txt", O_RDONLY) = -1 ENOENT (No such file or directory)
@@ -162,9 +162,9 @@ open("arquivo_inexistente.txt", O_RDONLY) = -1 ENOENT (No such file or directory
 - `ENOENT`: código do erro
 - `(No such file...)`: descrição do erro
 
-## Exemplos Práticos para o Laboratório
+## 🎯 Exemplos Práticos para o Laboratório
 
-### Exercício 1a - Observar printf
+### 📝 Exercício 1a - Observar printf
 
 ```bash
 # Compilar
@@ -181,7 +181,7 @@ strace -e write ./ex1a_printf
 - printf() pode gerar uma ou múltiplas chamadas write()
 - Bufferização da biblioteca C agrupa dados
 
-### Exercício 1b - Observar write
+### ✏️ Exercício 1b - Observar write
 
 ```bash
 # Compilar
@@ -195,7 +195,7 @@ strace -e write ./ex1b_write
 - write() vai direto ao kernel
 - Cada write() gera exatamente uma syscall
 
-### Exercício 2 - Leitura de Arquivo
+### 📖 Exercício 2 - Leitura de Arquivo
 
 ```bash
 # Compilar
@@ -217,7 +217,7 @@ close(3) = 0
 - `read()` lê do fd 3, mostra quantos bytes foram lidos
 - `close()` fecha o fd 3
 
-### Exercício 3 - Contador com Loop
+### 🔄 Exercício 3 - Contador com Loop
 
 ```bash
 # Compilar
@@ -235,7 +235,7 @@ strace -e read ./ex3_contador
 - Cada `read()` pode retornar um número diferente de bytes
 - Última `read()` retorna 0 (fim do arquivo)
 
-### Exercício 4 - Cópia de Arquivo
+### 📋 Exercício 4 - Cópia de Arquivo
 
 ```bash
 # Compilar  
@@ -253,9 +253,9 @@ strace -t -e read,write ./ex4_copia
 - Tamanhos de buffer nos parâmetros
 - Valores de retorno indicando bytes transferidos
 
-## Opções Úteis do strace
+## 🔧 Opções Úteis do strace
 
-### Timestamps
+### ⏰ Timestamps
 
 ```bash
 # Timestamp relativo
@@ -268,7 +268,7 @@ strace -t ./programa
 strace -tt ./programa
 ```
 
-### Detalhamento
+### 🔍 Detalhamento
 
 ```bash
 # Mostrar argumentos de string completos
@@ -281,7 +281,7 @@ strace -x ./programa
 strace -f ./programa
 ```
 
-### Filtros Avançados
+### 🎯 Filtros Avançados
 
 ```bash
 # Syscalls que começam com 'read'
@@ -294,9 +294,9 @@ strace -e trace='!write' ./programa
 strace -P dados/teste1.txt ./programa
 ```
 
-## Salvando Traces para o Relatório
+## 💾 Salvando Traces para o Relatório
 
-### Para Cada Exercício
+### 📁 Para Cada Exercício
 
 ```bash
 # Exercício 1a
@@ -316,7 +316,7 @@ strace -e read -o traces/ex3_reads.txt ./ex3_contador
 strace -e openat,read,write,close -o traces/ex4_trace.txt ./ex4_copia
 ```
 
-### Analisando os Traces Salvos
+### 📈 Analisando os Traces Salvos
 
 ```bash
 # Ver trace salvo
@@ -329,33 +329,33 @@ wc -l traces/ex1_trace.txt
 grep "read(" traces/ex3_trace.txt
 ```
 
-## Perguntas para Análise
+## ❓ Perguntas para Análise
 
 Ao observar os traces, pergunte-se:
 
-### Para os Exercícios 1a e 1b:
+### 📝 Para os Exercícios 1a e 1b:
 1. Quantas chamadas `write()` cada método gerou?
 2. Os tamanhos dos buffers são diferentes?
 3. Por que essa diferença?
 
-### Para o Exercício 2:
+### 📖 Para o Exercício 2:
 1. Qual file descriptor foi usado?
 2. Quantos bytes foram lidos de uma vez?
 3. O arquivo foi aberto e fechado corretamente?
 
-### Para o Exercício 3:
+### 🔄 Para o Exercício 3:
 1. Quantas chamadas `read()` foram necessárias?
 2. Todas retornaram o mesmo número de bytes?
 3. Como você sabe que chegou no fim do arquivo?
 
-### Para o Exercício 4:
+### 📋 Para o Exercício 4:
 1. As operações seguem o padrão read→write?
 2. Os tamanhos de leitura e escrita são iguais?
 3. Há diferença na performance entre buffers pequenos e grandes?
 
-## Problemas Comuns
+## ⚠️ Problemas Comuns
 
-### strace "permission denied"
+### 🔒 strace "permission denied"
 ```bash
 # Pode precisar de permissões especiais
 sudo strace ./programa
@@ -364,16 +364,16 @@ sudo strace ./programa
 chmod +x ./programa
 ```
 
-### Muita informação na tela
+### 📃 Muita informação na tela
 ```bash
 # Sempre salve em arquivo para análise
 strace -o trace.txt ./programa
 
 # Ou filtre syscalls
-strace -e open,read,write,close ./programa
+strace -e openat,read,write,close ./programa
 ```
 
-### Programa não aparece no trace
+### ❌ Programa não aparece no trace
 ```bash
 # Verificar se o programa executa normalmente primeiro
 ./programa
@@ -382,24 +382,22 @@ strace -e open,read,write,close ./programa
 strace ./programa
 ```
 
-## Comandos Resumidos
+## 📝 Comandos Resumidos
 
 | Comando | O que faz |
 |---------|-----------|
 | `strace ./prog` | Rastreia todas as syscalls |
-| `strace -e open,read ./prog` | Filtra syscalls específicas |
+| `strace -e openat,read ./prog` | Filtra syscalls específicas |
 | `strace -c ./prog` | Conta syscalls |
 | `strace -o file.txt ./prog` | Salva em arquivo |
 | `strace -t ./prog` | Adiciona timestamps |
 | `strace -s 200 ./prog` | Strings completas |
 
-## Conectando com a Teoria
+## 🌐 Conectando com a Teoria
 
 Lembre-se dos conceitos da aula:
 
 - **Modo Usuário → Modo Kernel**: Cada linha do strace mostra uma transição
-- **File Descriptors**: Números que o kernel usa para identificar arquivos abertos
-- **Buffers**: Tamanho do buffer afeta número de syscalls
 - **Performance**: Menos syscalls = melhor performance
 
 O strace torna visível a comunicação entre sua aplicação e o kernel, mostrando na prática os conceitos teóricos sobre chamadas de sistema!

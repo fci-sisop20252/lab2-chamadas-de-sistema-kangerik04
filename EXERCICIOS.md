@@ -40,12 +40,6 @@ make ex4
 
 **Use `make help` para ver todos os comandos disponíveis.**
 
-### 3. Criar Diretório para Traces
-
-```bash
-mkdir -p traces
-```
-
 ---
 
 ## Exercício 1a - Observando printf()
@@ -54,13 +48,18 @@ mkdir -p traces
 
 **Contexto:** Você sempre usou printf(), mas sabia que por trás ele usa outra função chamada write()?
 
-### Passo 1: Executar Normalmente
+### Passo 1: Compilar
+```bash
+gcc src/ex1a_printf.c -o ex1a_printf
+```
+
+### Passo 2: Executar Normalmente
 
 ```bash
 ./ex1a_printf
 ```
 
-### Passo 2: Executar com strace
+### Passo 3: Executar com strace
 
 ```bash
 strace -e write ./ex1a_printf
@@ -71,7 +70,7 @@ strace -e write ./ex1a_printf
 - printf() não é uma syscall direta - ela usa write() internamente
 - O comportamento pode ser diferente do que você espera!
 
-### Passo 3: Salvar Trace
+### Passo 4: Salvar Trace
 
 ```bash
 strace -e write -o traces/ex1a_trace.txt ./ex1a_printf
@@ -85,24 +84,29 @@ strace -e write -o traces/ex1a_trace.txt ./ex1a_printf
 
 **Contexto:** write() é uma syscall (system call) - uma função que vai direto para o kernel do sistema operacional.
 
-### Passo 1: Executar Normalmente
+### Passo 1: Compilar
+```bash
+gcc src/ex1b_write.c -o ex1b_write
+```
+
+### Passo 2: Executar Normalmente
 
 ```bash
 ./ex1b_write
 ```
 
-### Passo 2: Executar com strace
+### Passo 3: Executar com strace
 
 ```bash
 strace -e write ./ex1b_write
 ```
 
 **O que observar:**
-- Cada write() gera **exatamente uma syscall** (previsível)
-- File descriptor 1 = stdout (saída padrão)
+- Cada write() gera **exatamente uma syscall**
+- O file descriptor especificado é o 1 = stdout (saída padrão)
 - write() é **direto**: não há "surpresas" internamente
 
-### Passo 3: Salvar Trace
+### Passo 4: Salvar Trace
 
 ```bash
 strace -e write -o traces/ex1b_trace.txt ./ex1b_write
@@ -197,8 +201,7 @@ strace -o traces/ex2_trace.txt ./ex2_leitura
 
 1. **Qual file descriptor foi usado? Por que não 0, 1 ou 2?** *(responda no RELATORIO.md)*
 2. **Como você sabe que o arquivo foi lido completamente?** *(responda no RELATORIO.md)*
-3. **O que acontece se esquecer de fechar o arquivo?** *(responda no RELATORIO.md)*
-4. **Por que verificar retorno de cada syscall?** *(responda no RELATORIO.md)*
+3. **Por que devemos verificar retorno de cada syscall?** *(responda no RELATORIO.md)*
 
 ---
 
@@ -206,7 +209,7 @@ strace -o traces/ex2_trace.txt ./ex2_leitura
 
 **Objetivo:** Implementar loop de leitura e analisar múltiplas syscalls.
 
-### Passo 1: Analisar a Estrutura
+### Passo 1: Analisar o Código
 
 1. Abra `src/ex3_contador.c`
 2. Note que o `BUFFER_SIZE` é pequeno (64 bytes)
@@ -296,7 +299,7 @@ Teste diferentes tamanhos editando manualmente o arquivo:
 
 **Objetivo:** Implementar programa para realizar uma cópia de arquivo.
 
-### Passo 1: Entender a Complexidade
+### Passo 1: Entender o Código
 
 Este exercício envolve:
 - Abrir arquivo para leitura E escrita
@@ -397,8 +400,8 @@ Examine `traces/ex4_trace.txt` e procure:
 
 1. **Sequência de abertura:**
 ```
-open("dados/origem.txt", O_RDONLY) = 3
-open("dados/destino.txt", O_WRONLY|O_CREAT|O_TRUNC, 0644) = 4
+openat(AT_FDCWD, "dados/origem.txt", O_RDONLY) = 3
+openat(AT_FDCWD, "dados/destino.txt", O_WRONLY|O_CREAT|O_TRUNC, 0644) = 4
 ```
 
 2. **Padrão read/write:**
@@ -407,7 +410,7 @@ read(3, "conteudo...", 256) = 256
 write(4, "conteudo...", 256) = 256
 read(3, "mais conteudo...", 256) = 180
 write(4, "mais conteudo...", 180) = 180
-read(3, "", 256) = 0
+read(3, "", 256) = 0 # fim do arquivo
 ```
 
 3. **Fechamento:**
@@ -422,7 +425,7 @@ close(4) = 0
 2. **Que flags são essenciais no open() do destino?** *(responda no RELATORIO.md)*
 3. **O número de reads e writes é igual? Por quê?** *(responda no RELATORIO.md)*
 4. **Como você saberia se o disco ficou cheio?** *(responda no RELATORIO.md)*
-5. **O que acontece se esquecer de fechar os arquivos?** *(responda no RELATORIO.md)*
+5. **O que acontece se você esquecer de fechar os arquivos?** *(responda no RELATORIO.md)*
 
 ---
 

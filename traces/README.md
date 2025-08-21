@@ -34,6 +34,7 @@ strace -o traces/ex4_trace.txt ./ex4_copia
 ## Como Analisar os Traces
 
 ### Interpretar Linhas do strace
+Veja mais detalhes em [Guia do strace](guia_strace.md).
 
 Formato geral:
 ```
