@@ -1,0 +1,34 @@
+Este é o arquivo de origem para o exercício 3.
+
+O objetivo é copiar este arquivo completamente usando apenas syscalls.
+Não use funções como fread/fwrite - apenas open, read, write, close.
+
+Este arquivo é um pouco maior que os anteriores para demonstrar
+como o programa se comporta com múltiplas operações de I/O.
+
+Cada parágrafo representa um bloco de dados que será lido
+e escrito pelo seu programa de cópia.
+
+O tamanho do buffer definido no código determinará quantas
+chamadas read() e write() serão necessárias.
+
+Observe no strace como aparecem em pares:
+- read() lê dados do arquivo origem
+- write() escreve os mesmos dados no arquivo destino
+
+Este padrão read/write é fundamental em sistemas operacionais
+e é usado por ferramentas como cp, mv, rsync, backup, etc.
+
+Quando terminar, use 'diff dados/origem.txt dados/destino.txt'
+para verificar se a cópia foi perfeita. Se não houver saída,
+significa que os arquivos são idênticos!
+
+Algumas considerações importantes:
+- Sempre verifique o retorno das syscalls
+- Feche file descriptors para liberar recursos
+- Buffer maior = menos syscalls = melhor performance
+- Mas lembre de balancear performance vs uso de memória. Buffers maiores consomem mais memória.
+
+Final do arquivo de origem.
+Total aproximado: 1200 bytes.
+Com buffer de 256 bytes, espere cerca de 5 operações read/write.
